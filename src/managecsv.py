@@ -8,10 +8,12 @@ Created on Sat May 18 11:35:22 2019
 import pandas as pd
 import datetime
 import copy
+import math
 
 class manage_csv:
     
-    df_curv_with_axis = pd.DataFrame()
+    df_curv_front_with_axis = pd.DataFrame()
+    df_curv_back_with_axis = pd.DataFrame()
     df_paqui_with_axis = pd.DataFrame()
     df_ele = pd.DataFrame()
     df_curv = pd.DataFrame()
@@ -34,6 +36,7 @@ class manage_csv:
     age = 0
     k_max = 0
     paqui_min = 0
+    distance = 0
     x = []
     
     def stack_and_transform_front(self, df, status):
@@ -71,9 +74,10 @@ class manage_csv:
             
         if status == 2:
             self.df_stacked_front_cur = df_stacked_front[df_stacked_front['ID'] < list(df_stacked_front[df_stacked_front['X'] == 'BACK']['ID'])[0]]
-            self.df_curv_with_axis =  self.df_stacked_front_cur.drop(['ID'], axis = 1)
+            self.df_curv_front_with_axis =  copy.deepcopy(self.df_stacked_front_cur.drop(['ID'], axis = 1))
             self.df_stacked_front_cur.drop(['X', 'Y', 'ID'], axis = 1, inplace = True)
             self.df_stacked_back_cur = df_stacked_back
+            self.df_curv_back_with_axis = copy.deepcopy(df_stacked_back)
             self.df_stacked_back_cur.drop(['X', 'Y'], axis = 1, inplace = True)
 
     def stack_and_get_axis(self, df_paqui):
@@ -89,6 +93,23 @@ class manage_csv:
         self.df_paqui_with_axis.drop(['ID'], axis = 1, inplace = True)
         
 
+    def get_max_distance(self):
+        
+        #necesitamos conocer el punto de mayor curvatura, pudiendo ser de la parte posterior como de la parte anterior
+        axis_front = self.df_curv_front_with_axis.sort_values(by = ['Z'], ascending = True).head(1)
+        axis_back = self.df_curv_back_with_axis.sort_values(by = ['Z'], ascending = True).head(1)
+        if axis_front['Z'][0] < axis_back['Z'][0]:
+            axis_final = axis_front
+        else:
+            axis_final = axis_back       
+        #obtenemos el valor de las coordenadas del punto con mayor curvatura
+        max_axis_curv = axis_final.drop(['Z'], axis = 1).values.tolist()
+        axis_paqui = self.df_paqui_with_axis.sort_values(by = ['Z'], ascending = True).drop(['Z'], axis = 1).head(1).values.tolist()
+        self.distance = math.sqrt(((float(max_axis_curv[0][0].replace(",", ".")) - float(axis_paqui[0][0].replace(",", ".")))**2)+((float(max_axis_curv[0][1].replace(",", ".")) - float(axis_paqui[0][1].replace(",", ".")))**2))
+        
+        
+        
+        
     def get_max_depth(self):
 
         #Ordenamos los valores del eje Z y obtenemos el más alto
@@ -197,4 +218,6 @@ class manage_csv:
         self.get_max_var_curv()
         self.get_mean_curv()
         self.get_pacient_info()
-        self.x = [self.max_depth_front, self.max_depth_back, self.max_curve_front, self.max_curve_back, self.var_curve_front, self.var_curve_back, self.mean_curve_front, self.mean_curve_back, self.age, self.k_max, self.paqui_min]
+        self.get_max_distance()
+        #sacamos los valores necesarios en un vector para poder trabajar con el posteriormente
+        self.x = [self.max_depth_front, self.max_depth_back, self.max_curve_front, self.max_curve_back, self.var_curve_front, self.var_curve_back, self.mean_curve_front, self.mean_curve_back, self.age, self.k_max, self.paqui_min, self.distance]
