@@ -23,4 +23,22 @@ while a == 'S':
     csv_object = manage_csv(file_path1, file_path2, file_path3)
 
     x.append(csv_object.x)
+    y.append("")
     a = 'n'
+#creamos un fichero para almacenar los datos obtenidos para acciones posteriores   
+csv_file = pd.DataFrame(x, columns = ['Max Depth Front', 
+                                      'Max Depth Back', 
+                                      'Max Curve Front', 
+                                      'Max Curve Back', 
+                                      'Max Variation Curve Front', 
+                                      'Max Variation Curve Back', 
+                                      'Mean Curve Front', 
+                                      'Mean Curve Back', 
+                                      'Age', 
+                                      'K Max', 
+                                      'Paqui Min', 
+                                      'Distance Between Max Curve and Min Paqui'])
+
+csv_file_y = pd.DataFrame(y, columns = ['Treatment'])
+
+csv_file['Treatment'] = csv_file_y
