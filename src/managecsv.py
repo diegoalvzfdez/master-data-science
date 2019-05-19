@@ -11,8 +11,11 @@ import copy
 
 class manage_csv:
     
+    df_curv_with_axis = pd.DataFrame()
+    df_paqui_with_axis = pd.DataFrame()
     df_ele = pd.DataFrame()
     df_curv = pd.DataFrame()
+    df_paqui = pd.DataFrame()
     df_stacked_back = pd.DataFrame()
     df_stacked_front_ele = pd.DataFrame()
     df_stacked_front_cur = pd.DataFrame()
@@ -68,11 +71,23 @@ class manage_csv:
             
         if status == 2:
             self.df_stacked_front_cur = df_stacked_front[df_stacked_front['ID'] < list(df_stacked_front[df_stacked_front['X'] == 'BACK']['ID'])[0]]
+            self.df_curv_with_axis =  self.df_stacked_front_cur.drop(['ID'], axis = 1)
             self.df_stacked_front_cur.drop(['X', 'Y', 'ID'], axis = 1, inplace = True)
             self.df_stacked_back_cur = df_stacked_back
             self.df_stacked_back_cur.drop(['X', 'Y'], axis = 1, inplace = True)
 
-            
+    def stack_and_get_axis(self, df_paqui):
+        
+        df_stacked_paqui = df_paqui.stack()
+        df_stacked_paqui = df_stacked_paqui.reset_index()
+        df_stacked_paqui = df_stacked_paqui.rename(index = str, columns = {'level_0': 'X', 'level_1': 'Y', 0: 'Z'})
+        #Creamos una nueva columna donde introducimos los valores de los ID para poder hacer transformaciones posteriores
+        df_stacked_paqui['ID'] = df_stacked_paqui.index
+        df_stacked_paqui['ID'] = pd.to_numeric(df_stacked_paqui['ID'])
+        self.df_paqui_with_axis = df_stacked_paqui
+        self.df_paqui_with_axis = df_stacked_paqui[df_stacked_paqui['ID'] < list(df_stacked_paqui[df_stacked_paqui['X'] == 'Name']['ID'])[0]]
+        self.df_paqui_with_axis.drop(['ID'], axis = 1, inplace = True)
+        
 
     def get_max_depth(self):
 
@@ -167,14 +182,16 @@ class manage_csv:
         self.k_max = float(self.k_max.replace(',','.'))
         self.paqui_min = int(df_stacked[df_stacked['X'] == 'Pachy Min']['Z'].get_values()[0])
         
-    def __init__(self, name_ele, name_curv):
+    def __init__(self, name_ele, name_curv, name_paqui):
         
         #leemos el fichero que nos mandan
         self.df_ele = pd.read_csv(name_ele, sep = ';', index_col= 0, header = 0, encoding = "ISO-8859-1")
         self.df_curv = pd.read_csv(name_curv, sep = ';', index_col= 0, header = 0, encoding = "ISO-8859-1")
+        self.df_paqui = pd.read_csv(name_paqui, sep = ';', index_col= 0, header = 0, encoding = "ISO-8859-1")
         #enviamos las transformaciones necesarias para poder obtener los valores necesarios para entrenar nuestro clasificador
         self.stack_and_transform_front(self.df_ele, 1)
         self.stack_and_transform_front(self.df_curv, 2)
+        self.stack_and_get_axis(self.df_paqui)
         self.get_max_depth()
         self.get_max_curve()
         self.get_max_var_curv()

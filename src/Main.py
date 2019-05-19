@@ -19,8 +19,8 @@ while a == 'S':
 
     file_path1 = filedialog.askopenfilename()
     file_path2 = filedialog.askopenfilename()
-    
-    csv_object = manage_csv(file_path1, file_path2)
+    file_path3 = filedialog.askopenfilename()
+    csv_object = manage_csv(file_path1, file_path2, file_path3)
 
     x.append(csv_object.x)
     a = input('¿Desea continuar? (S/N)')
