@@ -205,10 +205,15 @@ class manage_csv:
         self.k_max = df_stacked[df_stacked['X'] == 'K Max (Front)']['Z'].get_values()[0]
         self.k_max = float(self.k_max.replace(',','.'))
         self.paqui_min = int(df_stacked[df_stacked['X'] == 'Pachy Min']['Z'].get_values()[0])
-        self.x_cornea = df_stacked[df_stacked['X'] == 'Cornea Center Pos X (related to apex, [mm])']['Z'].get_values()[0]
-        self.x_cornea = float(self.x_cornea.replace(",", "."))
-        self.y_cornea = df_stacked[df_stacked['X'] == 'Cornea Center Pos Y (related to apex, [mm])']['Z'].get_values()[0]
-        self.y_cornea = float(self.y_cornea.replace(",", "."))
+        #hay casos en los que en los ficheros no viene reflejada la posición (x, y) de la posición del centro de la córnea, por lo que en el caso de no encontramos, situamos la posición en el centro
+        try:
+            self.x_cornea = df_stacked[df_stacked['X'] == 'Cornea Center Pos X (related to apex, [mm])']['Z'].get_values()[0]
+            self.x_cornea = float(self.x_cornea.replace(",", "."))
+            self.y_cornea = df_stacked[df_stacked['X'] == 'Cornea Center Pos Y (related to apex, [mm])']['Z'].get_values()[0]
+            self.y_cornea = float(self.y_cornea.replace(",", "."))
+        except:
+            self.x_cornea = 0
+            self.y_cornea = 0
         
     def __init__(self, name_ele, name_curv, name_paqui):
         
