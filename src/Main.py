@@ -23,6 +23,7 @@ if __name__ == "__main__":
     files_virtual = []
     files_final = []
     i_comp = 0
+    
     for i in range(len(datafiles)):
         #sumamos 1 para poder hacer las agrupaciones de 3 en 3
         i_comp = i + 1
@@ -32,6 +33,7 @@ if __name__ == "__main__":
             files_virtual.append(datafiles[i])
             files_final.append(files_virtual)
             files_virtual = []
+            
     for i in range(len(files_final)):
         #al haber ordenado anteriormente el string alfabéticamente, sabemos que el fichero de curvatura es el primero, el de elevación el segundo y el de paquimetría el tercero
         stop = files_final[i]
