@@ -39,7 +39,8 @@ if __name__ == "__main__":
                                           'Age', 
                                           'K Max', 
                                           'Paqui Min', 
-                                          'Distance Between Max Curve and Min Paqui'])
+                                          'Distance Between Max Curve and Min Paqui',
+                                          'Position of Most Curve Point Relative to Center'])
     
     csv_file_y = pd.DataFrame(y, columns = ['Treatment'])
     
@@ -54,5 +55,6 @@ if __name__ == "__main__":
     csv_file['Max Variation Curve Front'] = csv_file['Max Variation Curve Front'].map(lambda x: round(x, 2))
     csv_file['Max Variation Curve Back'] = csv_file['Max Variation Curve Back'].map(lambda x: round(x, 2))
     csv_file['K Max'] = csv_file['K Max'].map(lambda x: round(x, 2))
+    csv_file['Position of Most Curve Point Relative to Center'] = csv_file['Position of Most Curve Point Relative to Center'].map(lambda x: round(x, 2))
     
     csv_file.to_csv("../data/csv_eye.csv", sep = ";", index = False)

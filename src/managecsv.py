@@ -37,6 +37,9 @@ class manage_csv:
     k_max = 0
     paqui_min = 0
     distance = 0
+    x_cornea = 0
+    y_cornea = 0
+    max_curve_pos_rel_to_center = 0
     x = []
     
     def stack_and_transform_front(self, df, status):
@@ -106,7 +109,7 @@ class manage_csv:
         max_axis_curv = axis_final.drop(['Z'], axis = 1).values.tolist()
         axis_paqui = self.df_paqui_with_axis.sort_values(by = ['Z'], ascending = True).drop(['Z'], axis = 1).head(1).values.tolist()
         self.distance = math.sqrt(((float(max_axis_curv[0][0].replace(",", ".")) - float(axis_paqui[0][0].replace(",", ".")))**2)+((float(max_axis_curv[0][1].replace(",", ".")) - float(axis_paqui[0][1].replace(",", ".")))**2))
-        
+        self.max_curve_pos_rel_to_center = math.sqrt(((float(max_axis_curv[0][0].replace(",", ".")) - self.x_cornea)**2)+((float(max_axis_curv[0][1].replace(",", ".")) - self.y_cornea)**2))
         
         
         
@@ -202,6 +205,10 @@ class manage_csv:
         self.k_max = df_stacked[df_stacked['X'] == 'K Max (Front)']['Z'].get_values()[0]
         self.k_max = float(self.k_max.replace(',','.'))
         self.paqui_min = int(df_stacked[df_stacked['X'] == 'Pachy Min']['Z'].get_values()[0])
+        self.x_cornea = df_stacked[df_stacked['X'] == 'Cornea Center Pos X (related to apex, [mm])']['Z'].get_values()[0]
+        self.x_cornea = float(self.x_cornea.replace(",", "."))
+        self.y_cornea = df_stacked[df_stacked['X'] == 'Cornea Center Pos Y (related to apex, [mm])']['Z'].get_values()[0]
+        self.y_cornea = float(self.y_cornea.replace(",", "."))
         
     def __init__(self, name_ele, name_curv, name_paqui):
         
@@ -220,4 +227,4 @@ class manage_csv:
         self.get_pacient_info()
         self.get_max_distance()
         #sacamos los valores necesarios en un vector para poder trabajar con el posteriormente
-        self.x = [self.max_depth_front, self.max_depth_back, self.max_curve_front, self.max_curve_back, self.var_curve_front, self.var_curve_back, self.mean_curve_front, self.mean_curve_back, self.age, self.k_max, self.paqui_min, self.distance]
+        self.x = [self.max_depth_front, self.max_depth_back, self.max_curve_front, self.max_curve_back, self.var_curve_front, self.var_curve_back, self.mean_curve_front, self.mean_curve_back, self.age, self.k_max, self.paqui_min, self.distance, self.max_curve_pos_rel_to_center]
