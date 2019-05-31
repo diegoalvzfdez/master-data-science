@@ -2,7 +2,7 @@
 """
 Created on Sun May 26 18:39:58 2019
 
-@author: lique
+@author: Diego Álvarez Fernández
 """
 
 from os import listdir
