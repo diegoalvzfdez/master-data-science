@@ -7,6 +7,8 @@ library(dplyr)
 library(ggplot2)
 library(sqldf)
 library(ggthemes)
+library(ggpubr)
+
 
 
 #vamos a realizar gráficos para tener una visión de los datos con los que estamos tratando
@@ -24,6 +26,8 @@ max.depth.front.by.age <- ggplot(max.depth.by.year, aes(x = Age, y = AVGMaxDepth
                                  caption = "Diego Álvarez Fernández")+ 
                             theme_minimal()
 
+max.depth.front.by.age
+
 max.depth.back.by.age <- ggplot(max.depth.by.year, aes(x = Age, y = AVGMaxDepthBack)) + 
                             geom_point() + 
                             geom_point(aes(color=Age)) +
@@ -31,7 +35,7 @@ max.depth.back.by.age <- ggplot(max.depth.by.year, aes(x = Age, y = AVGMaxDepthB
                                  caption = "Diego Álvarez Fernández") + 
                             theme_minimal()
 max.depth.back.by.age
-max.depth.front.by.age
+
 
 #una buena manera de observar lo que tenemos en nuestro DataSet es dibujando los histogramas que obtenemos
 
@@ -68,6 +72,18 @@ max.depth.back.hist
 max.depth.back.hist.by.treatment <- ggplot(max.depth.back, aes(x = MaxDepthBack, fill = Treatment)) + geom_histogram(binwidth = 50)
 max.depth.back.hist.by.treatment
 
+#por otro lado, podemos visualizar los histogramas de las curvaturas, con la información sesgada por tratamiento dado
+
+max.curve.front <- sqldf("select `Max Curve Front` as MaxCurveFront, `Treatment` from eye_data")
+max.curve.front <- filter(max.curve.front, MaxCurveFront > 0)
+max.curve.front.hist <- ggplot(max.curve.front, aes(x = MaxCurveFront, fill = Treatment)) + geom_histogram(binwidth = 0.1)
+max.curve.front.hist
+
+max.curve.back <- sqldf("select `Max Curve Back` as MaxCurveBack, `Treatment` from eye_data")
+max.curve.back <- filter(max.curve.back, MaxCurveBack > 0)
+max.curve.back.hist <- ggplot(max.curve.back, aes(x = MaxCurveBack, fill = Treatment)) + geom_histogram(binwidth = 0.1)
+max.curve.back.hist
+
 #podemos estudiar la relación entre la curvatura máxima y la elevación máxima
 max.depth.curve.front <- sqldf("select `Max Depth Front` as MaxDepthFront, `Max Curve Front` as MaxCurveFront, `Treatment` from eye_data")
 #limitamos los valores de máxima curvatura para evitar errores
@@ -93,7 +109,7 @@ depth.vs.curve.front.with.treatment
 avg.age.per.treatment <- sqldf("select Avg(`Age`) as AvgAge, `Treatment` from eye_data group by Treatment ")
 age.vs.treatment <- ggplot(avg.age.per.treatment, aes(x = Treatment, y = AvgAge)) + 
                       geom_col() + 
-                      labs(title="Media de edades de los pacientes por el tratamiento indicado", 
+                      labs(title="Media de edades de los pacientes por el \ntratamiento indicado", 
                            caption = "Diego Álvarez Fernández") +
                       theme_tufte()
 age.vs.treatment
