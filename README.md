@@ -18,3 +18,6 @@ Cuando un paciente presenta los síntomas de un queratocono, el especialista pue
 
 # Punto inicial
 
+Los datos son los obtenidos a partir del Oculus Pentacam. Esta máquina contiene una máquina rotatoria que captura imágenes del segmento anterior del ojo. Mediante estas imágenes, el software de dicha tecnología nos permite obtener los mapas de elevación, de curvatura y paquimétricos. La máquina tiene el siguiente aspecto:
+
+![Pentacam](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/OCULUS_Pentacam(1).jpg)
