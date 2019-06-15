@@ -21,3 +21,9 @@ Cuando un paciente presenta los síntomas de un queratocono, el especialista pue
 Los datos son los obtenidos a partir del Oculus Pentacam. Esta máquina contiene una máquina rotatoria que captura imágenes del segmento anterior del ojo. Mediante estas imágenes, el software de dicha tecnología nos permite obtener los mapas de elevación, de curvatura y paquimétricos. La máquina tiene el siguiente aspecto:
 
 ![Pentacam](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/OCULUS_Pentacam(1).jpg)
+
+Como ya nos podemos imaginar, esta tecnología no es utilizada únicamente para el estudio y diagnóstico de pacientes con la enfermedad del queratonoco. En la base de datos de esta máquina se encuentran multitud de pacientes con diferentes patologías, por lo que la labor de extracción de los datos es tediosa y complicada. Se han obtenido muestras de 461 ojos con queratocono, los cuales se han etiquetado entre: No operados, operados mediante Crosslinking y operados mediante anillos. Estas etiquetas son las que posteriormente nos permitirán configurar nuestros clasificadores.
+
+Una vez hemos obtenido los ficheros del Oculus Pentacam, obtenemos un conjunto de ficheros por usuario, de los cuales tenemos que aislar los 3 ficheros csv que nos interesan. En este punto es donde entra nuestro primer Script: Main_File_Management.py. Este Script nos permite pasar de una carpeta a otra de nuestro equipo aquellos ficheros que son útiles para nuestro proyecto. Afortunadamente, podemos distinguir los ficheros que necesitamos del resto, ya que finalizan por "_cur.csv", "_ele.csv" y "_pac.csv". Gracias a esto, podemos tener en 3 carpetas diferentes las muestras sin operar y las muestras operadas mediante crosslinking y mediante anillos.
+
+![Ficheros](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/Ficheros.jpg)
