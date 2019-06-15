@@ -1,0 +1,81 @@
+---
+title: "Estudio de los datos preprocesados"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### Gráficos de dispersión de las máximas elevaciones
+
+```{r}
+max.depth.front <- sqldf("select `Max Depth Front` as MaxDepthFront, `Treatment` from eye_data")
+max.depth.front.hist.by.treatment <- ggplot(max.depth.front, aes(x = MaxDepthFront, fill = Treatment)) + 
+                                        geom_histogram(binwidth = 50)+
+                                        labs(title="Histograma de las máximas elevaciones de la \nzona posterior del ojo del paciente en \nfunción del tratamiento dado", 
+                                             caption = "Diego Álvarez Fernández") + 
+                                        theme_tufte()
+max.depth.front.hist.by.treatment
+
+max.depth.back <- sqldf("select `Max Depth Back` as MaxDepthBack, `Treatment` from eye_data")
+max.depth.back.hist.by.treatment <- ggplot(max.depth.back, aes(x = MaxDepthBack, fill = Treatment))+ 
+                                        geom_histogram(binwidth = 50) +
+                                        labs(title="Histograma de las máximas elevaciones de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                                             caption = "Diego Álvarez Fernández") + 
+                                        theme_tufte()
+max.depth.back.hist.by.treatment
+
+```
+
+
+### Gráficos de dispersión de las máximas curvaturas
+```{r}
+max.curve.front <- sqldf("select `Max Curve Front` as MaxCurveFront, `Treatment` from eye_data")
+max.curve.back <- sqldf("select `Max Curve Back` as MaxCurveBack, `Treatment` from eye_data")
+max.curve.front <- filter(max.curve.front, MaxCurveFront > 0)
+max.curve.front.hist <- ggplot(max.curve.front, aes(x = MaxCurveFront, fill = Treatment)) + 
+                          geom_histogram(binwidth = 0.1)+
+                          labs(title="Histograma de las máximas curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
+                               caption = "Diego Álvarez Fernández") + 
+                          theme_tufte()
+max.curve.front.hist
+
+max.var.curve.back <- filter(max.var.curve.back, MaxVariationCurveBack > 0)
+max.curve.back <- filter(max.curve.back, MaxCurveBack > 0)
+max.curve.back.hist <- ggplot(max.curve.back, aes(x = MaxCurveBack, fill = Treatment)) + 
+                          geom_histogram(binwidth = 0.1)+
+                          labs(title="Histograma de las máximas curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                               caption = "Diego Álvarez Fernández") + 
+                          theme_tufte()
+max.curve.back.hist
+```
+
+### Gráficos de dispersion de las máximas desviaciones de las curvaturas
+
+```{r}
+max.var.curve.front <- sqldf("select `Max Variation Curve Front` as MaxVariationCurveFront, `Treatment` from eye_data")
+max.var.curve.front <- filter(max.var.curve.front, MaxVariationCurveFront > 0)
+max.var.curve.front.hist <- ggplot(max.var.curve.front, aes(x = MaxVariationCurveFront, fill = Treatment)) + 
+                              geom_histogram(binwidth = 0.1) +
+                              labs(title="Histograma de las máximas desviaciones de las curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
+                                   caption = "Diego Álvarez Fernández") + 
+                              theme_tufte()
+max.var.curve.front.hist
+
+max.var.curve.back <- sqldf("select `Max Variation Curve Back` as MaxVariationCurveBack, `Treatment` from eye_data")
+max.var.curve.back <- filter(max.var.curve.back, MaxVariationCurveBack > 0)
+max.var.curve.back.hist <- ggplot(max.var.curve.back, aes(x = MaxVariationCurveBack, fill = Treatment)) +
+                              geom_histogram(binwidth = 0.1) +
+                              labs(title="Histograma de las máximas desviaciones de las curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                                   caption = "Diego Álvarez Fernández") + 
+                              theme_tufte()
+max.var.curve.back.hist
+```
+

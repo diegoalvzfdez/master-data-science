@@ -61,7 +61,7 @@ max.depth.front.hist.by.treatment
 max.depth.back <- sqldf("select `Max Depth Back` as MaxDepthBack, `Treatment` from eye_data")
 max.depth.back.hist <- ggplot(max.depth.back, aes(x = MaxDepthBack)) + 
                           geom_histogram(binwidth = 50) +
-                          labs(title="Histograma de las máximas elevaciones de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                          labs(title="Histograma de las máximas elevaciones de la \nzona anterior del ojo del paciente", 
                                caption = "Diego Álvarez Fernández") + 
                           theme_tufte()
                           
@@ -69,20 +69,72 @@ max.depth.back.hist
 
 #podemos hacer lo mismo, identificando los resultados por tratamiento
 
-max.depth.back.hist.by.treatment <- ggplot(max.depth.back, aes(x = MaxDepthBack, fill = Treatment)) + geom_histogram(binwidth = 50)
+max.depth.back.hist.by.treatment <- ggplot(max.depth.back, aes(x = MaxDepthBack, fill = Treatment))+ 
+                                        geom_histogram(binwidth = 50) +
+                                        labs(title="Histograma de las máximas elevaciones de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                                             caption = "Diego Álvarez Fernández") + 
+                                        theme_tufte()
 max.depth.back.hist.by.treatment
 
 #por otro lado, podemos visualizar los histogramas de las curvaturas, con la información sesgada por tratamiento dado
 
 max.curve.front <- sqldf("select `Max Curve Front` as MaxCurveFront, `Treatment` from eye_data")
 max.curve.front <- filter(max.curve.front, MaxCurveFront > 0)
-max.curve.front.hist <- ggplot(max.curve.front, aes(x = MaxCurveFront, fill = Treatment)) + geom_histogram(binwidth = 0.1)
+max.curve.front.hist <- ggplot(max.curve.front, aes(x = MaxCurveFront, fill = Treatment)) + 
+                          geom_histogram(binwidth = 0.1)+
+                          labs(title="Histograma de las máximas curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
+                               caption = "Diego Álvarez Fernández") + 
+                          theme_tufte()
 max.curve.front.hist
 
 max.curve.back <- sqldf("select `Max Curve Back` as MaxCurveBack, `Treatment` from eye_data")
 max.curve.back <- filter(max.curve.back, MaxCurveBack > 0)
-max.curve.back.hist <- ggplot(max.curve.back, aes(x = MaxCurveBack, fill = Treatment)) + geom_histogram(binwidth = 0.1)
+max.curve.back.hist <- ggplot(max.curve.back, aes(x = MaxCurveBack, fill = Treatment)) + 
+                          geom_histogram(binwidth = 0.1)+
+                          labs(title="Histograma de las máximas curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                               caption = "Diego Álvarez Fernández") + 
+                          theme_tufte()
 max.curve.back.hist
+
+#podemos estudiar tambien los histogramas de las máximas desviaciones de las curvaturas en función del tratamiento dado
+
+max.var.curve.front <- sqldf("select `Max Variation Curve Front` as MaxVariationCurveFront, `Treatment` from eye_data")
+max.var.curve.front <- filter(max.var.curve.front, MaxVariationCurveFront > 0)
+max.var.curve.front.hist <- ggplot(max.var.curve.front, aes(x = MaxVariationCurveFront, fill = Treatment)) + 
+                              geom_histogram(binwidth = 0.1) +
+                              labs(title="Histograma de las máximas desviaciones de las curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
+                                   caption = "Diego Álvarez Fernández") + 
+                              theme_tufte()
+max.var.curve.front.hist
+
+max.var.curve.back <- sqldf("select `Max Variation Curve Back` as MaxVariationCurveBack, `Treatment` from eye_data")
+max.var.curve.back <- filter(max.var.curve.back, MaxVariationCurveBack > 0)
+max.var.curve.back.hist <- ggplot(max.var.curve.back, aes(x = MaxVariationCurveBack, fill = Treatment)) +
+                              geom_histogram(binwidth = 0.1) +
+                              labs(title="Histograma de las máximas desviaciones de las curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                                   caption = "Diego Álvarez Fernández") + 
+                              theme_tufte()
+max.var.curve.back.hist
+
+#podemos estudiar los histogramas de las medias de las curvaturas en función del tratamiento
+
+mean.curve.front <- sqldf("select `Mean Curve Front` as MeanCurveFront, `Treatment` from eye_data")
+mean.curve.front <- filter(mean.curve.front, MeanCurveFront > 0)
+mean.curve.front.hist <- ggplot(mean.curve.front, aes(x = MeanCurveFront, fill = Treatment)) + 
+                            geom_histogram(binwidth = 0.1) +
+                            labs(title="Histograma de las medias de las curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
+                                 caption = "Diego Álvarez Fernández") + 
+                            theme_tufte()
+mean.curve.front.hist
+
+mean.curve.back <- sqldf("select `Mean Curve Back` as MeanCurveBack, `Treatment` from eye_data")
+mean.curve.back <- filter(mean.curve.back, MeanCurveBack > 0)
+mean.curve.back.hist <- ggplot(mean.curve.back, aes(x = MeanCurveBack, fill = Treatment)) + 
+                            geom_histogram(binwidth = 0.1) +
+                            labs(title="Histograma de las medias de las curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                                 caption = "Diego Álvarez Fernández") + 
+                            theme_tufte()
+mean.curve.back.hist
 
 #podemos estudiar la relación entre la curvatura máxima y la elevación máxima
 max.depth.curve.front <- sqldf("select `Max Depth Front` as MaxDepthFront, `Max Curve Front` as MaxCurveFront, `Treatment` from eye_data")
@@ -157,4 +209,33 @@ k_max.vs.treatment <- ggplot(k_max.and.treatment, aes(x = KMax, colour = )) +
                         labs(title="Histogramas de las K máximas en función del \ntratamiento", 
                              caption = "Diego Álvarez Fernández")
 k_max.vs.treatment
+
+#Lo mismo podemos hacer para estudiar la evolución de la paqui minima
+
+paqui.per.treatment <- sqldf("select `Paqui Min` as PaquiMin, `Treatment` from eye_data")
+paqui.per.treatment.density <- ggplot(paqui.per.treatment, aes(x = PaquiMin, fill = Treatment)) + 
+  geom_density(alpha = 0.2) + 
+  theme_tufte() + 
+  labs(title="Gráfico de densidad de la distribución de paquimetría en \nfunción del tratamiento", 
+       caption = "Diego Álvarez Fernández")
+paqui.per.treatment.density
+
+#podemos estudiar los dos parámetros que nos faltan
+
+distance.per.treatment <- sqldf("select `Distance Between Max Curve and Min Paqui` as Distance, `Treatment` from eye_data")
+distance.per.treatment.density <- ggplot(distance.per.treatment, aes(x = Distance, fill = Treatment)) + 
+                                  geom_density(alpha = 0.2) + 
+                                  theme_tufte() + 
+                                  labs(title="Gráfico de densidad de la distribución de las distancias entre los puntos de máxima curvatura y mínima paquimetría en \nfunción del tratamiento", 
+                                  caption = "Diego Álvarez Fernández")
+distance.per.treatment.density
+
+position.per.treatment <- sqldf("select `Position of Most Curve Point Relative to Center` as Position, `Treatment` from eye_data")
+position.per.treatment.density <- ggplot(position.per.treatment, aes(x = Position, fill = Treatment)) + 
+  geom_density(alpha = 0.2) + 
+  theme_tufte() + 
+  labs(title="Gráfico de densidad de la distribución de las distancias entre los puntos de máxima curvatura y mínima paquimetría en \nfunción del tratamiento", 
+       caption = "Diego Álvarez Fernández")
+position.per.treatment.density
+
 
