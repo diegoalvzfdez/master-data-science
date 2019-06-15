@@ -18,7 +18,7 @@ Cuando un paciente presenta los síntomas de un queratocono, el especialista pue
 
 # Punto inicial
 
-Los datos son los obtenidos a partir del Oculus Pentacam. Esta máquina contiene una máquina rotatoria que captura imágenes del segmento anterior del ojo. Mediante estas imágenes, el software de dicha tecnología nos permite obtener los mapas de elevación, de curvatura y paquimétricos. La máquina tiene el siguiente aspecto:
+Los datos son los obtenidos a partir del Oculus Pentacam. Esta máquina contiene una máquina rotatoria que captura imágenes del segmento anterior del ojo. Mediante estas imágenes, el software de dicha tecnología nos permite obtener los mapas de elevación, de curvatura y paquimétricos del ojo del paciente. La máquina tiene el siguiente aspecto:
 
 ![Pentacam](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/OCULUS_Pentacam(1).jpg)
 
@@ -26,4 +26,56 @@ Como ya nos podemos imaginar, esta tecnología no es utilizada únicamente para 
 
 Una vez hemos obtenido los ficheros del Oculus Pentacam, obtenemos un conjunto de ficheros por usuario, de los cuales tenemos que aislar los 3 ficheros csv que nos interesan. En este punto es donde entra nuestro primer Script: Main_File_Management.py. Este Script nos permite pasar de una carpeta a otra de nuestro equipo aquellos ficheros que son útiles para nuestro proyecto. Afortunadamente, podemos distinguir los ficheros que necesitamos del resto, ya que finalizan por "_cur.csv", "_ele.csv" y "_pac.csv". Gracias a esto, podemos tener en 3 carpetas diferentes las muestras sin operar y las muestras operadas mediante crosslinking y mediante anillos.
 
-![Ficheros](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/Ficheros.jpg)
+![Ficheros](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/Ficheros.png)
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+# Tratamiento de los ficheros del Pentacam
+
+Una vez hemos finalizado con la extracción y la gestión de los datos obtenidos del Oculus Pentacam, nuestro siguiente paso es obtener un Dataset con la información necesaria para poder entrenar un clasificador. En una primera instancia, lo que hemos obtenido en la extracción tiene un aspecto similar a esto (se puede encontrar en este repositorio un ejemplo anonimizado de los csv obtenidos en la extracción del Pentacam):
+
+![csv](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/csv%20obtenido%20de%20la%20extracción.PNG)
+
+Como se puede observar, lo que obtenemos es un conjunto de mapas, en los cuales se pinta un eje X, un eje Y, y los valores de elevación/curvatura/paquimetría correspondientes a dichas coordenadas. De todos los mapas presentes en el csv, sólamente nos interesan los dos primeros, que corresponden a la cara posterior y a la cara anterior del ojo. Además, una vez pasamos todos los mapas, en el csv se encuentran una serie de datos que también son relevantes a la hora de entrenar nuestro clasificador. En este punto, entra a escena nuestro segundo Script creado: Main.py. Este Script es el encargado de generar los ficheros ya procesados que con los que podemos entrenar nuestro clasificador. 
+
+A la hora de elegir cómo programar nuestro Script, se eligió emplear Python ya que se requería el uso de la librería Pandas y se decidió no generar el código mediante un Notebook. Esto es debido a que se pretende en un futuro poder realizar esta funcionalidad mediante una interfaz gráfica, en la cual el usuario únicamente debe seleccionar dónde se encuentran los ficheros generados por Pentacam para obtenerlos posteriormente ya tratados (y posteriormente introducirlos directamente a un clasificador para obtener la predicción del paciente). Se ha generado también una libreria, en la cual hemos creado los métodos necesarios para obtener los datos requeridos por el predictor. Esta libreria se puede encontrar en la carpeta /src, llamada managecsv.py.
+
+El funcionamiento del Script es muy sencillo. Una vez ejecutado, el Script pide al usuario la ruta donde se encuentran los ficheros a tratar. Mediante Pop Ups, pregunta en primer lugar que tipo de datos son los que le van a llegar (si son pacientes operados o no), para despues abrir una ventana emergente donde el usuario debe seleccionar en qué carpeta se encuentran los ficheros csv. El preguntar al usuario que tipo de pacientes son los que va a introducir es lo que nos permite etiquetar las muestras que nos van llegando. Una vez el usuario selecciona donde se encuentran los ficheros, el Script obtiene la siguiente información de los mapas (elevación, curvatura y paquimétrico) del paciente:
+
+- Máxima Elevación de la cara Frontal.
+- Máxima Elevación de la cara Anterior.
+- Máxima Curvatura de la cara Frontal.
+- Máxima Curvatura de la cara Anterior.
+- Máxima Diferencia de Curvatura de la cara Frontal.
+- Máxima Diferencia de Curvatura de la cara Anterior.
+- Media de las Curvaturas de la cara Frontal.
+- Media de las Curvaturas de la cara Anterior.
+- Edad del Paciente.
+- K Máxima.
+- Paquimetría mínima.
+- Distancia entre el punto de Máxima Curvatura y Mínima Paquimetría.
+- Distancia del punto de Máxima Curvatura con respecto al centro de la córnea.
+- Tratamiento.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
