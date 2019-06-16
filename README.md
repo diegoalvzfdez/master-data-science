@@ -98,7 +98,7 @@ Antes de crear ningún modelo, el primer paso a dar es estudiar las distintas co
 
 Como se puede observar, hay una gran correlación entre los parámetros que son compartidos entre la parte posterior y la parte anterior de la córnea. Por ejemplo, existe una gran correlación entre la máxima elevación de la cara posterior con la cara anterior. Por tanto, se decide obtener, entre las dos caras, los valores más extremos, ya que son lo que determinan si un paciente se debe operar o no. Entonces, de las elevaciones se cogerá el valor más alto y de las curvaturas el valor mínimo (ya que a menor radio, mayor curvatura).
 
-Tras realizar estos cambios, se observar que el número de muestras entre pacientes operados, operados mediante crosslinking y operados mediante anillos está muy desbalanceado. Esto hace que la predicción pase a ser si un paciente debe ser operado o no, ya que esta agrupación hace que los dos conjuntos de muestras estén mucho más balanceados (230 paciente no operados frente a 231 pacientes operados)
+Tras realizar estos cambios, se observa que el número de muestras entre pacientes operados, operados mediante crosslinking y operados mediante anillos está muy desbalanceado. Esto hace que la predicción pase a ser si un paciente debe ser operado o no, ya que esta agrupación hace que los dos conjuntos de muestras estén mucho más balanceados (230 paciente no operados frente a 231 pacientes operados)
 
 ## 2º Paso: Búsqueda del modelo
 
@@ -218,7 +218,7 @@ Non-trainable params: 0
 
 # Conclusiones y líneas futuras
 
-Una vez hemos concluido el presente proyecto, hemos podido realizar un proyecto desde la toma de datos, hasta la generación de un modelo predictivo. Los datos obtenidos, como ya se ha descrito anteriormente, han sido tomados en bruto, tal y como salen de la máquina Oculus Pentacam, descrita en epígrafes anteriores. Se ha requerido realizar un sistema de manejo de ficheros y de tratamiento de los datos para poder empezar a tener algo con lo que poder trabajar.
+Una vez hemos concluido el presente estudio, hemos podido realizar un proyecto desde la toma de datos, hasta la generación de un modelo predictivo. Los datos obtenidos, como ya se ha descrito anteriormente, han sido tomados en bruto, tal y como salen de la máquina Oculus Pentacam, descrita en epígrafes anteriores. Se ha requerido realizar un sistema de manejo de ficheros y de tratamiento de los datos para poder empezar a tener algo con lo que poder trabajar.
 
 El mayor esfuerzo ejercido en este proyecto ha sido el gestionar los datos obtenidos para poder generar un Dataset con el que poder trabajar posteriormente en los Scripts de visualización y de modelado. Tal y como se ha descrito, se han tenido que unir un conjunto de 6 mapas, repartidos en 3 ficheros csv diferentes, en los cuales además se poseía información adicional del paciente aparte de la contenida en los mapas.
 
