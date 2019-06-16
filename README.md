@@ -18,7 +18,7 @@ Cuando un paciente presenta los síntomas de un queratocono, el especialista pue
 
 # Punto inicial
 
-Los datos son los obtenidos a partir del Oculus Pentacam. Esta máquina contiene una máquina rotatoria que captura imágenes del segmento anterior del ojo. Mediante estas imágenes, el software de dicha tecnología nos permite obtener los mapas de elevación, de curvatura y paquimétricos del ojo del paciente. La máquina tiene el siguiente aspecto:
+Los datos son los obtenidos a partir del Oculus Pentacam. Esta tecnología contiene una máquina rotatoria que captura imágenes del segmento anterior del ojo. Mediante estas imágenes, el software de dicha tecnología nos permite obtener los mapas de elevación, de curvatura y paquimétricos del ojo del paciente. La máquina tiene el siguiente aspecto:
 
 ![Pentacam](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/OCULUS_Pentacam(1).jpg)
 
@@ -37,11 +37,11 @@ Una vez hemos finalizado con la extracción y la gestión de los datos obtenidos
 
 ![csv](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/csv%20obtenido%20de%20la%20extracción.PNG)
 
-Como se puede observar, lo que obtenemos es un conjunto de mapas, en los cuales se pinta un eje X, un eje Y, y los valores de elevación/curvatura/paquimetría correspondientes a dichas coordenadas. De todos los mapas presentes en el csv, sólamente nos interesan los dos primeros, que corresponden a la cara posterior y a la cara anterior del ojo. Además, una vez pasamos todos los mapas, en el csv se encuentran una serie de datos que también son relevantes a la hora de entrenar nuestro clasificador. En este punto, entra a escena nuestro segundo Script creado: Main.py. Este Script es el encargado de generar los ficheros ya procesados que con los que podemos entrenar nuestro clasificador. 
+Como se puede observar, lo que obtenemos es un conjunto de mapas, en los cuales se pinta un eje X, un eje Y, y los valores de elevación/curvatura/paquimetría correspondientes a dichas coordenadas. De todos los mapas presentes en el csv, sólamente nos interesan los dos primeros, que corresponden a la cara posterior y a la cara anterior del ojo. Además, una vez pasamos todos los mapas, en el csv se encuentran una serie de datos que también son relevantes a la hora de entrenar nuestro clasificador. En este punto, entra a escena nuestro segundo Script creado: Main.py. Este Script es el encargado de generar los ficheros ya procesados con los que podemos entrenar nuestro clasificador. 
 
 A la hora de elegir cómo programar nuestro Script, se eligió emplear Python ya que se requería el uso de la librería Pandas y se decidió no generar el código mediante un Notebook. Esto es debido a que se pretende en un futuro poder realizar esta funcionalidad mediante una interfaz gráfica, en la cual el usuario únicamente debe seleccionar dónde se encuentran los ficheros generados por Pentacam para obtenerlos posteriormente ya tratados (y posteriormente introducirlos directamente a un clasificador para obtener la predicción del paciente). Se ha generado también una libreria, en la cual hemos creado los métodos necesarios para obtener los datos requeridos por el predictor. Esta libreria se puede encontrar en la carpeta /src, llamada managecsv.py.
 
-El funcionamiento del Script es muy sencillo. Una vez ejecutado, el Script pide al usuario la ruta donde se encuentran los ficheros a tratar. Mediante Pop Ups, pregunta en primer lugar que tipo de datos son los que le van a llegar (si son pacientes operados o no), para despues abrir una ventana emergente donde el usuario debe seleccionar en qué carpeta se encuentran los ficheros csv. El preguntar al usuario que tipo de pacientes son los que va a introducir es lo que nos permite etiquetar las muestras que nos van llegando. Una vez el usuario selecciona donde se encuentran los ficheros, el Script obtiene la siguiente información de los mapas (elevación, curvatura y paquimétrico) del paciente:
+El funcionamiento del Script es muy sencillo. Una vez ejecutado, el Script pide al usuario la ruta donde se encuentran los ficheros a tratar. Mediante Pop Ups, pregunta en primer lugar qué tipo de datos son los que le van a llegar (si son pacientes operados o no), para despues abrir una ventana emergente donde el usuario debe seleccionar en qué carpeta se encuentran los ficheros csv. El preguntar al usuario que tipo de pacientes son los que va a introducir es lo que nos permite etiquetar las muestras que nos van llegando. Una vez el usuario selecciona dónde se encuentran los ficheros, el Script obtiene la siguiente información de los mapas (elevación, curvatura y paquimétrico) del paciente:
 
 - Máxima Elevación de la cara Frontal.
 - Máxima Elevación de la cara Anterior.
@@ -81,9 +81,84 @@ Con estos gráficos lo que se pretende es encontrar cierta relación entre las v
 - Se opera antes a los pacientes más jóvenes que a los ancianos. 
 - Se observa una mayor K máxima en aquellos pacientes a los cuales se les ha realizado alguna operación.
 - Por otro lado, los pacientes operados tienen una menor paquimetría mínima con respecto a los operados.
-- Podemos observar que a mayor curvatura máxima, se encuentra una menor paquimetría mínima.
+- Podemos observar que a mayor curvatura máxima (la curvatura se mide por el radio, a menor radio, mayor curvatura), se encuentra una menor paquimetría mínima.
 
 
+--------------------------------------------------------------------------------------------------------------------
 
+# Modelado
 
+En este último punto, se ha tratado de entrenar un sistema de clasificación para poder dar una predicción sobre el tratamiento al que hay que someter a un paciente. Se describirán los tratamientos que se han dado a los datos al igual que los modelos que se han empleado, mostrando las métricas y conclusiones obtenidas. En este caso, para la creación de los modelos se ha empleado el lenguaje Python, programado en un notebook. En este caso se ha obtado por un Notebook ya que nos permite iterar constantemente para obtener los resultados más óptimos.
+
+## 1º Paso: Estudio de las correlaciones entre los parámetros
+
+Antes de crear ningún modelo, el primer paso a dar es estudiar las distintas correlaciones entre los diferentes parámetros. Mediante este estudio, lo que se pretende es eliminar al máximo las correlaciones, ya que estas dificultan las labores predictivas de los modelos. La primera tabla de correlaciones tiene un aspecto parecido al siguiente:
+
+![Correlaciones](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/Correlaciones.png)
+
+Como se puede observar, hay una gran correlación entre los parámetros que son compartidos entre la parte posterior y la parte anterior de la córnea. Por ejemplo, existe una gran correlación entre la máxima elevación de la cara posterior con la cara anterior. Por tanto, se decide obtener, entre las dos caras, los valores más extremos, ya que son lo que determinan si un paciente se debe operar o no. Entonces, de las elevaciones se cogerá el valor más alto y de las curvaturas el valor mínimo (ya que a menor radio, mayor curvatura).
+
+Tras realizar estos cambios, se observar que el número de muestras entre pacientes operados, operados mediante crosslinking y operados mediante anillos está muy desbalanceado. Esto hace que la predicción pase a ser si un paciente debe ser operado o no, ya que esta agrupación hace que los dos conjuntos de muestras estén mucho más balanceados (230 paciente no operados frente a 231 pacientes operados)
+
+## 2º Paso: Búsqueda del modelo
+
+En este punto vamos a ir probando modelos en búsqueda de aquel que nos de mejores métricas a la hora de predecir si a un usuario se le debe operar o no. Para ello, enumeraremos los modelos empleados, los hiperparámetros escogidos y las métricas obtenidas. Las métricas se mostrarán las obtenidas mediante el método train_test_split y el método cross_validation_score.
+
+### Regresión Logística.
+
+- Mediante Cross Validation: se obtuvo una media del Accuracy del 73 %
+
+- Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+
+![Regresión Logística](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/Reg_Log.png)
+
+Con un Accuracy del 75.56 %, una precisión para los pacientes operados de un 77% y una precisión para los pacientes no operados del 75 %.
+
+### K Nearest Neighbors
+
+- Hiperparámetros elegidos:
+
+  n_neighbors = 9
+
+- Mediante Cross Validation: Obtenido un Accuracy medio de un 61.38 %.
+
+- Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+
+![KN](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/KN.png)
+
+Con un Accuracy del 65,46%, una precisión para los pacientes operados de un 68% y una precisión para los pacientes no operados de un 63 %
+
+### SVM (Kernel Linear)
+
+- Hiperparámetros elegidos:
+
+  C = 1000
+  
+ - Mediante Cross Validation: Obtenido un Accuracy medio del 73.96%
+ 
+ - Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+ 
+ ![SVM](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/SVM.png)
+ 
+ Con un Accuracy del 71,22%, una precisión para los pacientes operados de un 75% y una precisión para los pacientes no operados de un 68 %
+
+### Decision Trees
+
+- Hiperparámetros elegidos:
+
+  min_samples_leaf = 7
+  
+  max_depth = 13
+
+- Mediante Cross Validation: Obtenido un Accuracy medio del 70.28 %
+
+- Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+
+![Decision Tree](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/Decision_Tree.png)
+
+Con un Accuracy del 64,02%, una precisión para los pacientes operados de un 66% y una precisión para los pacientes no operados de un 62 %
+
+### Random Forest
+
+- Hiperparámetros elegidos:
 
