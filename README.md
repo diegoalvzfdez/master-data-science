@@ -176,6 +176,27 @@ Con un Accuracy del 64,02%, una precisión para los pacientes operados de un 66%
 
 Con un Accuracy del 76.34 %, una precisión para los pacientes operados de un 87% y una precisión para los pacientes no operados de un 66 %
 
+### Gradient Booset Trees
+
+- Hiperparámetros elegidos:
+
+  max_depth = 3
+
+  max_leaf_nodes = 5
+  
+  min_samples_leaf = 3
+  
+  n_estimators = 1200
+  
+- Mediante Cross Validation: Obtenido un Accuracy medio del 72.23 %
+
+- Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+
+![Gradient Boosted Tree](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/Gradient.png)
+
+Con un Accuracy del 68.81 %, una precisión para los pacientes operados de un 67% y una precisión para los pacientes no operados de un 70 %  
+  
+
 ### XGBoost
 
 - Hiperparámetros elegidos:
@@ -193,6 +214,38 @@ Con un Accuracy del 76.34 %, una precisión para los pacientes operados de un 87
 ![XGBoost](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/xgboost.png)
 
 Con un Accuracy del 72,04%, una precisión para los pacientes operados de un 81% y una precisión para los pacientes no operados de un 62 %
+
+### Ensamblaje de modelos
+
+- XGBoost + Gradient Boosted Tree
+
+  Mediante Cross Validation: Obtenido un Accuracy medio del 74.40 %
+
+  Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+
+  ![XGBoost más Gradient Boosted Tree](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/XGB_Gradient.png)
+
+  Con un Accuracy del 70.96%, una precisión para los pacientes operados de un 77% y una precisión para los pacientes no operados de un 62 %
+
+- XGBoost + Random Forest 
+
+  Mediante Cross Validation: Obtenido un Accuracy medio del 74.61 %
+
+  Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+
+  ![XGBoost más Random Forest](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/XGB_RF.png)
+
+  Con un Accuracy del 74.19%, una precisión para los pacientes operados de un 82% y una precisión para los pacientes no operados de un 65 %
+
+- XGBoost + Random Forest + Gradient Boosted Tree
+
+  Mediante Cross Validation: Obtenido un Accuracy medio del 75.27 %
+
+  Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+
+  ![XGBoost más Random Forest más Gradient Boosted Tree](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/union.png)
+
+  Con un Accuracy del 75.26%, una precisión para los pacientes operados de un 85% y una precisión para los pacientes no operados de un 65 %
 
 ### Deep Learning
 
