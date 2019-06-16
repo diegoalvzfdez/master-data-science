@@ -30,6 +30,13 @@ max.depth.front.hist.by.treatment <- ggplot(max.depth.front, aes(x = MaxDepthFro
                                         theme_tufte()
 max.depth.front.hist.by.treatment
 
+max.depth.front.dens.by.treatment <- ggplot(max.depth.front, aes(x = MaxDepthFront, fill = Treatment)) + 
+                                        geom_density(alpha = 0.2)+
+                                        labs(title="Densidades de las máximas elevaciones de la \nzona posterior del ojo del paciente en \nfunción del tratamiento dado", 
+                                             caption = "Diego Álvarez Fernández") + 
+                                        theme_tufte()
+max.depth.front.dens.by.treatment
+
 max.depth.back <- sqldf("select `Max Depth Back` as MaxDepthBack, `Treatment` from eye_data")
 max.depth.back.hist.by.treatment <- ggplot(max.depth.back, aes(x = MaxDepthBack, fill = Treatment))+ 
                                         geom_histogram(binwidth = 50) +
@@ -37,6 +44,13 @@ max.depth.back.hist.by.treatment <- ggplot(max.depth.back, aes(x = MaxDepthBack,
                                              caption = "Diego Álvarez Fernández") + 
                                         theme_tufte()
 max.depth.back.hist.by.treatment
+
+max.depth.back.dens.by.treatment <- ggplot(max.depth.back, aes(x = MaxDepthBack, fill = Treatment))+ 
+                                        geom_density(alpha = 0.2) +
+                                        labs(title="Densidades de las máximas elevaciones de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                                             caption = "Diego Álvarez Fernández") + 
+                                        theme_tufte()
+max.depth.back.dens.by.treatment
 
 ```
 
@@ -55,13 +69,31 @@ max.curve.front.hist <- ggplot(max.curve.front, aes(x = MaxCurveFront, fill = Tr
                           theme_tufte()
 max.curve.front.hist
 
+max.curve.front.dens <- ggplot(max.curve.front, aes(x = MaxCurveFront, fill = Treatment)) + 
+                          geom_density(alpha = 0.2)+
+                          labs(title="Densidades de las máximas curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
+                               caption = "Diego Álvarez Fernández") + 
+                          theme_tufte()
+max.curve.front.dens
+
+
 max.curve.back <- filter(max.curve.back, MaxCurveBack > 0)
+max.curve.back <- filter(max.curve.back, MaxCurveBack < 15)
+
+
 max.curve.back.hist <- ggplot(max.curve.back, aes(x = MaxCurveBack, fill = Treatment)) + 
                           geom_histogram(binwidth = 0.1)+
                           labs(title="Histograma de las máximas curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
                                caption = "Diego Álvarez Fernández") + 
                           theme_tufte()
 max.curve.back.hist
+
+max.curve.back.dens <- ggplot(max.curve.back, aes(x = MaxCurveBack, fill = Treatment)) + 
+                          geom_density(alpha = 0.2)+
+                          labs(title="Densidades de las máximas curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                               caption = "Diego Álvarez Fernández") + 
+                          theme_tufte()
+max.curve.back.dens
 ```
 
 ### Máximas Desviaciones de las Curvaturas
@@ -69,6 +101,7 @@ max.curve.back.hist
 ```{r}
 max.var.curve.front <- sqldf("select `Max Variation Curve Front` as MaxVariationCurveFront, `Treatment` from eye_data")
 max.var.curve.front <- filter(max.var.curve.front, MaxVariationCurveFront > 0)
+max.var.curve.front <- filter(max.var.curve.front, MaxVariationCurveFront < 15)
 max.var.curve.front.hist <- ggplot(max.var.curve.front, aes(x = MaxVariationCurveFront, fill = Treatment)) + 
                               geom_histogram(binwidth = 0.1) +
                               labs(title="Histograma de las máximas desviaciones de las curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
@@ -76,14 +109,29 @@ max.var.curve.front.hist <- ggplot(max.var.curve.front, aes(x = MaxVariationCurv
                               theme_tufte()
 max.var.curve.front.hist
 
+max.var.curve.front.dens <- ggplot(max.var.curve.front, aes(x = MaxVariationCurveFront, fill = Treatment)) + 
+                              geom_density(alpha = 0.2) +
+                              labs(title="Densidades de las máximas desviaciones de las curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
+                                   caption = "Diego Álvarez Fernández") + 
+                              theme_tufte()
+max.var.curve.front.dens
+
 max.var.curve.back <- sqldf("select `Max Variation Curve Back` as MaxVariationCurveBack, `Treatment` from eye_data")
 max.var.curve.back <- filter(max.var.curve.back, MaxVariationCurveBack > 0)
+max.var.curve.back <- filter(max.var.curve.back, MaxVariationCurveBack < 15)
 max.var.curve.back.hist <- ggplot(max.var.curve.back, aes(x = MaxVariationCurveBack, fill = Treatment)) +
                               geom_histogram(binwidth = 0.1) +
                               labs(title="Histograma de las máximas desviaciones de las curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
                                    caption = "Diego Álvarez Fernández") + 
                               theme_tufte()
 max.var.curve.back.hist
+
+max.var.curve.back.dens <- ggplot(max.var.curve.back, aes(x = MaxVariationCurveBack, fill = Treatment)) +
+                              geom_density(alpha = 0.2) +
+                              labs(title="Densidades de las máximas desviaciones de las curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                                   caption = "Diego Álvarez Fernández") + 
+                              theme_tufte()
+max.var.curve.back.dens
 ```
 
 ### Medias de las Curvaturas
@@ -98,6 +146,13 @@ mean.curve.front.hist <- ggplot(mean.curve.front, aes(x = MeanCurveFront, fill =
                             theme_tufte()
 mean.curve.front.hist
 
+mean.curve.front.dens <- ggplot(mean.curve.front, aes(x = MeanCurveFront, fill = Treatment)) + 
+                            geom_density(alpha = 0.2) +
+                            labs(title="Densidades de las medias de las curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
+                                 caption = "Diego Álvarez Fernández") + 
+                            theme_tufte()
+mean.curve.front.dens
+
 mean.curve.back <- sqldf("select `Mean Curve Back` as MeanCurveBack, `Treatment` from eye_data")
 mean.curve.back <- filter(mean.curve.back, MeanCurveBack > 0)
 mean.curve.back.hist <- ggplot(mean.curve.back, aes(x = MeanCurveBack, fill = Treatment)) + 
@@ -106,6 +161,13 @@ mean.curve.back.hist <- ggplot(mean.curve.back, aes(x = MeanCurveBack, fill = Tr
                                  caption = "Diego Álvarez Fernández") + 
                             theme_tufte()
 mean.curve.back.hist
+
+mean.curve.back.dens <- ggplot(mean.curve.back, aes(x = MeanCurveBack, fill = Treatment)) + 
+                            geom_density(alpha = 0.2) +
+                            labs(title="Densidades de las medias de las curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                                 caption = "Diego Álvarez Fernández") + 
+                            theme_tufte()
+mean.curve.back.dens
 ```
 
 ### Edad, K max y Paqui Min
