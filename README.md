@@ -226,7 +226,7 @@ Este proyecto termina con el estudio del comportamiento de los modelos con los d
 
 En un futuro, se pretende poder crear una interfaz en la que el usuario únicamente tenga que introducir los tres mapas (elevación, curvatura y paquimetría), para que el sistema le devuelva una predicción, en porcentaje, sobre qué decisión tomar acerca del tratamiento del paciente. Además, obteniendo una mayor cantidad de datos, sería viable poder realizar predicciones acerca de qué tratamiento dar al paciente (si operarlo mediante crosslinking o mediante anillos) y no solamente predecir si se debe operar o no. 
 
-
+En conclusión, en este proyecto se ha realizado una primera iteración sobre poder generar un sistema de predicción acerca del tratamiento para paliar la enfermedad del queratocono. Queda mucho trabajo por delante, pero los resultados obtenidos en este proyecto han sido suficientemente satisfactorios como para demostrar que se puede avanzar más.
 
 
 
