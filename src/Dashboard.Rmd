@@ -153,7 +153,7 @@ distance.per.treatment <- sqldf("select `Distance Between Max Curve and Min Paqu
 distance.per.treatment.density <- ggplot(distance.per.treatment, aes(x = Distance, fill = Treatment)) + 
                                   geom_density(alpha = 0.2) + 
                                   theme_tufte() + 
-                                  labs(title="Gráfico de densidad de la distribución de las distancias entre los puntos de máxima curvatura y mínima paquimetría en \nfunción del tratamiento", 
+                                  labs(title="Gráfico de densidad de la distribución de las distancias entre \nlos puntos de máxima curvatura y mínima paquimetría en \nfunción del tratamiento", 
                                   caption = "Diego Álvarez Fernández")
 distance.per.treatment.density
 
@@ -161,7 +161,7 @@ position.per.treatment <- sqldf("select `Position of Most Curve Point Relative t
 position.per.treatment.density <- ggplot(position.per.treatment, aes(x = Position, fill = Treatment)) + 
   geom_density(alpha = 0.2) + 
   theme_tufte() + 
-  labs(title="Gráfico de densidad de la distribución de las distancias entre los puntos de máxima curvatura y mínima paquimetría en \nfunción del tratamiento", 
+  labs(title="Gráfico de densidad de la distribución de las distancias entre \nlos puntos de máxima curvatura y el centro de la cornea \nfunción del tratamiento", 
        caption = "Diego Álvarez Fernández")
 position.per.treatment.density
 ```
