@@ -73,7 +73,15 @@ En el siguiente link se puede observar los gráficos creados mediante ggplot par
 
 [Visualización de los datos preprocesados](https://diegoalvzfdez.github.io/) 
 
+Con estos gráficos lo que se pretende es encontrar cierta relación entre las variables que hemos generado en nuestros Scripts y sus distribuciones. Así, podemos buscar si se ha generado algun tipo de dato corrupto, que altere las distribuciones y que sea perjudicial a la hora de realizar una predicción. Con estos gráficos hemos podido sacar una cierta serie de conclusiones que nos ayudan a entender un poco más los datos a los cuales nos enfrentamos:
 
+- Las elevaciones producidas en la córnea no nos permiten diferenciar que tipo de tratamiento se ha recomendado al paciente.
+- Los pacientes a los cuales no se les ha practicado ningun tipo de cirugía tienen una curvatura mucho menos acentuada que los pacientes a los cuales si se les ha practicado una cirugía. 
+- Además, los pacientes operados tenían una mayor desviación de curvaturas en su córnea con respecto a los pacientes sin operar.
+- Se opera antes a los pacientes más jóvenes que a los ancianos. 
+- Se observa una mayor K máxima en aquellos pacientes a los cuales se les ha realizado alguna operación.
+- Por otro lado, los pacientes operados tienen una menor paquimetría mínima con respecto a los operados.
+- Podemos observar que a mayor curvatura máxima, se encuentra una menor paquimetría mínima.
 
 
 
