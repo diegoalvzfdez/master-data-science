@@ -58,20 +58,20 @@ El funcionamiento del Script es muy sencillo. Una vez ejecutado, el Script pide 
 - Distancia del punto de Máxima Curvatura con respecto al centro de la córnea.
 - Tratamiento.
 
+Tratando todos los ficheros de los pacientes los cuales no se han operado, y los operados mediante las técnicas de crosslinking y anillos, obtenemos el fichero ya procesado que podemos observar en la carpeta /preprocessed_data del presente repositorio.
 
 
+--------------------------------------------------------------------------------------------------------------------
 
+# Dataset Preprocesado
 
+Una vez ya hemos obtenido el Dataset con el cual podemos trabajar, podemos pasar a la fase de estudiar los datos que hemos obtenido. En esta fase, pasamos a realizar la programación en R, creando un Script que nos permitirá obtener las gráficas necesarias para poder entender los datos a los cuales nos enfrentamos. 
 
+En una primera instancia, lo primero que debemos hacer es estudiar los histogramas de nuestro Dataset para poder observar cómo se agrupan todas las variables de nuestro sistema. Además, ggplot nos permite visualizar los diferentes histogramas desglosados por una variable, que en este caso es el tratamiento que se ha dado al paciente. 
 
+En el siguiente link se puede observar los gráficos creados mediante ggplot para estudiar los datos preprocesados:
 
-
-
-
-
-
-
-
+[Visualización de los datos preprocesados](https://diegoalvzfdez.github.io/)
 
 
 
