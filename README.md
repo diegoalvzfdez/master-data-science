@@ -71,7 +71,7 @@ En una primera instancia, lo primero que debemos hacer es estudiar los histogram
 
 En el siguiente link se puede observar los gráficos creados mediante ggplot para estudiar los datos preprocesados:
 
-[Visualización de los datos preprocesados](https://diegoalvzfdez.github.io/)
+[Visualización de los datos preprocesados](https://diegoalvzfdez.github.io/) 
 
 
 
