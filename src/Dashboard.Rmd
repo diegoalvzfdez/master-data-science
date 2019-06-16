@@ -8,12 +8,18 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library(sqldf)
+library(ggplot2)
+library(ggthemes)
+library(dplyr)
+library(ggpubr)
+eye_data <- data.table::fread('C:/Users/lique/OneDrive/Documents/GitHub/master-data-science/preprocessed_data/csv_eye.csv', sep = ";")
 ```
 
 Column {.tabset}
 -----------------------------------------------------------------------
 
-### Gráficos de dispersión de las máximas elevaciones
+### Máximas Elevaciones
 
 ```{r}
 max.depth.front <- sqldf("select `Max Depth Front` as MaxDepthFront, `Treatment` from eye_data")
@@ -35,10 +41,12 @@ max.depth.back.hist.by.treatment
 ```
 
 
-### Gráficos de dispersión de las máximas curvaturas
+### Máximas Curvaturas
 ```{r}
 max.curve.front <- sqldf("select `Max Curve Front` as MaxCurveFront, `Treatment` from eye_data")
+
 max.curve.back <- sqldf("select `Max Curve Back` as MaxCurveBack, `Treatment` from eye_data")
+
 max.curve.front <- filter(max.curve.front, MaxCurveFront > 0)
 max.curve.front.hist <- ggplot(max.curve.front, aes(x = MaxCurveFront, fill = Treatment)) + 
                           geom_histogram(binwidth = 0.1)+
@@ -47,7 +55,6 @@ max.curve.front.hist <- ggplot(max.curve.front, aes(x = MaxCurveFront, fill = Tr
                           theme_tufte()
 max.curve.front.hist
 
-max.var.curve.back <- filter(max.var.curve.back, MaxVariationCurveBack > 0)
 max.curve.back <- filter(max.curve.back, MaxCurveBack > 0)
 max.curve.back.hist <- ggplot(max.curve.back, aes(x = MaxCurveBack, fill = Treatment)) + 
                           geom_histogram(binwidth = 0.1)+
@@ -57,7 +64,7 @@ max.curve.back.hist <- ggplot(max.curve.back, aes(x = MaxCurveBack, fill = Treat
 max.curve.back.hist
 ```
 
-### Gráficos de dispersion de las máximas desviaciones de las curvaturas
+### Máximas Desviaciones de las Curvaturas
 
 ```{r}
 max.var.curve.front <- sqldf("select `Max Variation Curve Front` as MaxVariationCurveFront, `Treatment` from eye_data")
@@ -79,3 +86,106 @@ max.var.curve.back.hist <- ggplot(max.var.curve.back, aes(x = MaxVariationCurveB
 max.var.curve.back.hist
 ```
 
+### Medias de las Curvaturas
+
+```{r}
+mean.curve.front <- sqldf("select `Mean Curve Front` as MeanCurveFront, `Treatment` from eye_data")
+mean.curve.front <- filter(mean.curve.front, MeanCurveFront > 0)
+mean.curve.front.hist <- ggplot(mean.curve.front, aes(x = MeanCurveFront, fill = Treatment)) + 
+                            geom_histogram(binwidth = 0.1) +
+                            labs(title="Histograma de las medias de las curvaturas de la \nzona posterior del ojo del paciente en función \ndel tratamiento dado", 
+                                 caption = "Diego Álvarez Fernández") + 
+                            theme_tufte()
+mean.curve.front.hist
+
+mean.curve.back <- sqldf("select `Mean Curve Back` as MeanCurveBack, `Treatment` from eye_data")
+mean.curve.back <- filter(mean.curve.back, MeanCurveBack > 0)
+mean.curve.back.hist <- ggplot(mean.curve.back, aes(x = MeanCurveBack, fill = Treatment)) + 
+                            geom_histogram(binwidth = 0.1) +
+                            labs(title="Histograma de las medias de las curvaturas de la \nzona anterior del ojo del paciente en función \ndel tratamiento dado", 
+                                 caption = "Diego Álvarez Fernández") + 
+                            theme_tufte()
+mean.curve.back.hist
+```
+
+### Edad, K max y Paqui Min
+
+```{r}
+age.per.treatment <- sqldf("select `Age`, `Treatment` from eye_data")
+age.vs.treatment.density <- ggplot(age.per.treatment, aes(x = Age, fill = Treatment)) + 
+                              geom_density(alpha = 0.2) + 
+                              theme_tufte() + 
+                              labs(title="Gráfico de densidad de la distribución de edades en \nfunción del tratamiento", 
+                                   caption = "Diego Álvarez Fernández")
+age.vs.treatment.density
+
+avg.age.per.treatment <- sqldf("select Avg(`Age`) as AvgAge, `Treatment` from eye_data group by Treatment ")
+age.vs.treatment <- ggplot(avg.age.per.treatment, aes(x = Treatment, y = AvgAge)) + 
+                      geom_col() + 
+                      labs(title="Media de edades de los pacientes por el \ntratamiento indicado", 
+                           caption = "Diego Álvarez Fernández") +
+                      theme_tufte()
+age.vs.treatment
+
+k_max.and.treatment <- sqldf("select `K Max` as KMax, `Treatment` from eye_data")
+k_max.and.treatment <- filter(k_max.and.treatment, KMax < 200)
+k_max.vs.treatment <- ggplot(k_max.and.treatment, aes(x = KMax, fill = Treatment)) + 
+                        geom_density(alpha = 0.2) + 
+                        theme_tufte() + 
+                        labs(title="Gráfico de densidad de las K máximas en función del \ntratamiento", 
+                             caption = "Diego Álvarez Fernández")
+k_max.vs.treatment
+
+paqui.per.treatment <- sqldf("select `Paqui Min` as PaquiMin, `Treatment` from eye_data")
+paqui.per.treatment.density <- ggplot(paqui.per.treatment, aes(x = PaquiMin, fill = Treatment)) + 
+  geom_density(alpha = 0.2) + 
+  theme_tufte() + 
+  labs(title="Gráfico de densidad de la distribución de paquimetría en \nfunción del tratamiento", 
+       caption = "Diego Álvarez Fernández")
+paqui.per.treatment.density
+```
+
+
+### Posiciones relativas
+
+```{r}
+distance.per.treatment <- sqldf("select `Distance Between Max Curve and Min Paqui` as Distance, `Treatment` from eye_data")
+distance.per.treatment.density <- ggplot(distance.per.treatment, aes(x = Distance, fill = Treatment)) + 
+                                  geom_density(alpha = 0.2) + 
+                                  theme_tufte() + 
+                                  labs(title="Gráfico de densidad de la distribución de las distancias entre los puntos de máxima curvatura y mínima paquimetría en \nfunción del tratamiento", 
+                                  caption = "Diego Álvarez Fernández")
+distance.per.treatment.density
+
+position.per.treatment <- sqldf("select `Position of Most Curve Point Relative to Center` as Position, `Treatment` from eye_data")
+position.per.treatment.density <- ggplot(position.per.treatment, aes(x = Position, fill = Treatment)) + 
+  geom_density(alpha = 0.2) + 
+  theme_tufte() + 
+  labs(title="Gráfico de densidad de la distribución de las distancias entre los puntos de máxima curvatura y mínima paquimetría en \nfunción del tratamiento", 
+       caption = "Diego Álvarez Fernández")
+position.per.treatment.density
+```
+
+
+### Curvatura vs Elevación y Paquimetría
+
+```{r}
+max.depth.curve.front <- sqldf("select `Max Depth Front` as MaxDepthFront, `Max Curve Front` as MaxCurveFront, `Treatment` from eye_data")
+max.depth.curve.front <- filter(max.depth.curve.front, MaxCurveFront > 0)
+depth.vs.curve.front.with.treatment <-  ggplot(max.depth.curve.front, aes(x = MaxDepthFront, y = MaxCurveFront, colour = Treatment)) + 
+                                          geom_point() +
+                                          labs(title="Gráfico de dispersión entre la máxima profundidad \ny la máxima curvatura de la zona posterior del ojo \nen función del tratamiento", 
+                                               caption = "Diego Álvarez Fernández") + 
+                                          theme_tufte()
+depth.vs.curve.front.with.treatment
+
+paqui.and.curve <- sqldf("select `Max Curve Front` as MaxCurveFront, `Paqui Min` as PaquiMin, `Treatment` from eye_data")
+paqui.vs.curve.with.treatment <- ggplot(paqui.and.curve, aes(x = MaxCurveFront, y = PaquiMin, colour = Treatment)) + 
+                                    geom_jitter() + 
+                                    theme_tufte() + 
+                                    geom_smooth(lwd=1, se=FALSE, method="lm", col="black") + 
+                                    labs(title="Gráfico de dispersión de la máxima curvatura posterior \nfrente a la mínima paquimetría en función del \ntratamiento", 
+                                         caption = "Diego Álvarez Fernández")
+
+paqui.vs.curve.with.treatment
+```

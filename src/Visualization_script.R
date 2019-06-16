@@ -10,7 +10,6 @@ library(ggthemes)
 library(ggpubr)
 
 
-
 #vamos a realizar gráficos para tener una visión de los datos con los que estamos tratando
 
 eye_data <- data.table::fread('C:/Users/lique/OneDrive/Documents/GitHub/master-data-science/preprocessed_data/csv_eye.csv', sep = ";")
