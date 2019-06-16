@@ -176,7 +176,7 @@ Con un Accuracy del 64,02%, una precisión para los pacientes operados de un 66%
 
 Con un Accuracy del 76.34 %, una precisión para los pacientes operados de un 87% y una precisión para los pacientes no operados de un 66 %
 
-### Gradient Booset Trees
+### Gradient Boosted Trees
 
 - Hiperparámetros elegidos:
 
