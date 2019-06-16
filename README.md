@@ -88,7 +88,7 @@ Con estos gráficos lo que se pretende es encontrar cierta relación entre las v
 
 # Modelado
 
-En este último punto, se ha tratado de entrenar un sistema de clasificación para poder dar una predicción sobre el tratamiento al que hay que someter a un paciente. Se describirán los tratamientos que se han dado a los datos al igual que los modelos que se han empleado, mostrando las métricas y conclusiones obtenidas. En este caso, para la creación de los modelos se ha empleado el lenguaje Python, programado en un notebook. En este caso se ha obtado por un Notebook ya que nos permite iterar constantemente para obtener los resultados más óptimos.
+En este último punto, se ha tratado de entrenar un sistema de clasificación para poder dar una predicción sobre el tratamiento al que hay que someter a un paciente. Se describirán los tratamientos que se han dado a los datos al igual que los modelos que se han empleado, mostrando las métricas y conclusiones obtenidas. En este caso, para la creación de los modelos se ha empleado el lenguaje Python, programado en un notebook. En este caso se ha obtado por un Notebook ya que nos permite iterar constantemente para obtener los resultados más óptimos. Todas las iteraciones y los procesos realizados se pueden observar en el Script Main_Train.ipynb encontrado en la carpeta /src.
 
 ## 1º Paso: Estudio de las correlaciones entre los parámetros
 
@@ -98,7 +98,7 @@ Antes de crear ningún modelo, el primer paso a dar es estudiar las distintas co
 
 Como se puede observar, hay una gran correlación entre los parámetros que son compartidos entre la parte posterior y la parte anterior de la córnea. Por ejemplo, existe una gran correlación entre la máxima elevación de la cara posterior con la cara anterior. Por tanto, se decide obtener, entre las dos caras, los valores más extremos, ya que son lo que determinan si un paciente se debe operar o no. Entonces, de las elevaciones se cogerá el valor más alto y de las curvaturas el valor mínimo (ya que a menor radio, mayor curvatura).
 
-Tras realizar estos cambios, se observar que el número de muestras entre pacientes operados, operados mediante crosslinking y operados mediante anillos está muy desbalanceado. Esto hace que la predicción pase a ser si un paciente debe ser operado o no, ya que esta agrupación hace que los dos conjuntos de muestras estén mucho más balanceados (230 paciente no operados frente a 231 pacientes operados)
+Tras realizar estos cambios, se observa que el número de muestras entre pacientes operados, operados mediante crosslinking y operados mediante anillos está muy desbalanceado. Esto hace que la predicción pase a ser si un paciente debe ser operado o no, ya que esta agrupación hace que los dos conjuntos de muestras estén mucho más balanceados (230 paciente no operados frente a 231 pacientes operados)
 
 ## 2º Paso: Búsqueda del modelo
 
@@ -161,4 +161,74 @@ Con un Accuracy del 64,02%, una precisión para los pacientes operados de un 66%
 ### Random Forest
 
 - Hiperparámetros elegidos:
+
+  max_depth = 9
+  
+  min_samples_leaf = 1
+  
+  n_estimators = 180
+
+- Mediante Cross Validation: Obtenido un Accuracy medio del 76.57 %
+
+- Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+
+![Random Forest](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/Random_Forest.png)
+
+Con un Accuracy del 76.34 %, una precisión para los pacientes operados de un 87% y una precisión para los pacientes no operados de un 66 %
+
+### XGBoost
+
+- Hiperparámetros elegidos:
+
+  learning_rate = 0.16
+  
+  max_depth = 2
+  
+  n_estimators = 130
+
+- Mediante Cross Validation: Obtenido un Accuracy medio del 76.57 %
+
+- Mediante Train Test Split: se obtuvo una matriz de confusión de este tipo:
+
+![XGBoost](https://raw.githubusercontent.com/diegoalvzfdez/master-data-science/master/imgs/xgboost.png)
+
+Con un Accuracy del 72,04%, una precisión para los pacientes operados de un 81% y una precisión para los pacientes no operados de un 62 %
+
+### Deep Learning
+
+- Estructura establecida:
+
+Layer (type)                 Output Shape              Param #   
+
+dense_52 (Dense)             (None, 4)                 36        
+
+dense_53 (Dense)             (None, 4)                 20        
+
+dense_54 (Dense)             (None, 1)                 5         
+
+Total params: 61
+Trainable params: 61
+Non-trainable params: 0
+
+- Mediante Cross Validation: Obtenido un Accuracy del 75.38 %
+
+- Mediante Train Test Split: Obtenido un Accuracy del 74.10%, una precisión para los pacientes operados de un 73.61% y una precisión para los pacientes no operados de un 74.62 %
+
+--------------------------------------------------------------------------------------------------------------------
+
+# Conclusiones y líneas futuras
+
+Una vez hemos concluido el presente estudio, hemos podido realizar un proyecto desde la toma de datos, hasta la generación de un modelo predictivo. Los datos obtenidos, como ya se ha descrito anteriormente, han sido tomados en bruto, tal y como salen de la máquina Oculus Pentacam, descrita en epígrafes anteriores. Se ha requerido realizar un sistema de manejo de ficheros y de tratamiento de los datos para poder empezar a tener algo con lo que poder trabajar.
+
+El mayor esfuerzo ejercido en este proyecto ha sido el gestionar los datos obtenidos para poder generar un Dataset con el que poder trabajar posteriormente en los Scripts de visualización y de modelado. Tal y como se ha descrito, se han tenido que unir un conjunto de 6 mapas, repartidos en 3 ficheros csv diferentes, en los cuales además se poseía información adicional del paciente aparte de la contenida en los mapas.
+
+Este proyecto termina con el estudio del comportamiento de los modelos con los datos que hemos obtenido. Se es consciente que la cantidad de datos obtenida es bastante baja, por lo que el entrenamiento de los modelos de clasificación no es el más óptimo. Aun así, se ha logrado superar el 75 % de aciertos con modelos como el Random Forest o con una regresión logística. También obtenemos resultados cercanos al 75% con una red neuronal sencilla, ya que con los pocos datos que tenemos, no es viable complicarla aumentando los parámetros del sistema.
+
+En un futuro, se pretende poder crear una interfaz en la que el usuario únicamente tenga que introducir los tres mapas (elevación, curvatura y paquimetría), para que el sistema le devuelva una predicción, en porcentaje, sobre qué decisión tomar acerca del tratamiento del paciente. Además, obteniendo una mayor cantidad de datos, sería viable poder realizar predicciones acerca de qué tratamiento dar al paciente (si operarlo mediante crosslinking o mediante anillos) y no solamente predecir si se debe operar o no. 
+
+En conclusión, en este proyecto se ha realizado una primera iteración sobre poder generar un sistema de predicción acerca del tratamiento para paliar la enfermedad del queratocono. Queda mucho trabajo por delante, pero los resultados obtenidos en este proyecto han sido suficientemente satisfactorios como para demostrar que se puede avanzar más.
+
+
+
+
 
