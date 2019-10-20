@@ -34,6 +34,9 @@ class manage_csv:
     mean_curve_front = 0
     mean_curve_back = 0
     age = 0
+    first_name = ""
+    last_name = ""
+    eye = ""
     k_max = 0
     paqui_min = 0
     distance = 0
@@ -41,6 +44,7 @@ class manage_csv:
     y_cornea = 0
     max_curve_pos_rel_to_center = 0
     x = []
+    pacient_info = []
     
     def stack_and_transform_front(self, df, status):
         
@@ -215,6 +219,11 @@ class manage_csv:
             self.x_cornea = 0
             self.y_cornea = 0
         
+        #Obtenemos los datos del nombre y el ojo estudiado
+        self.first_name = df_stacked[df_stacked['X'] == 'FirstName']['Z'].get_values()[0]
+        self.last_name = df_stacked[df_stacked['X'] == 'LastName']['Z'].get_values()[0]
+        self.eye = df_stacked[df_stacked['X'] == 'Eye']['Z'].get_values()[0]
+        
     def __init__(self, name_ele, name_curv, name_paqui):
         
         #leemos el fichero que nos mandan
@@ -233,3 +242,4 @@ class manage_csv:
         self.get_max_distance()
         #sacamos los valores necesarios en un vector para poder trabajar con el posteriormente
         self.x = [self.max_depth_front, self.max_depth_back, self.max_curve_front, self.max_curve_back, self.var_curve_front, self.var_curve_back, self.mean_curve_front, self.mean_curve_back, self.age, self.k_max, self.paqui_min, self.distance, self.max_curve_pos_rel_to_center]
+        self.pacient_info = [self.first_name, self.last_name, self.eye]

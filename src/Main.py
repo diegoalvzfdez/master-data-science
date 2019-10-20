@@ -28,6 +28,7 @@ if __name__ == "__main__":
     #creamos los vectores que van a determinar nuestro dataset final
     x = []
     y = []
+    pacient_info = pd.DataFrame(columns = ['First Name', 'Last Name', 'Eye'])
     #generamos un diccionario que nos permite introducir la cadena de texto para definir el tratamiento
     dict_treatment = {'1': 'Pacientes sin operar',
                       '2': 'Pacientes tratados mediante crosslinking',
@@ -89,7 +90,13 @@ if __name__ == "__main__":
                 continue
             x.append(csv_object.x)
             y.append(dict_treatment[treatment])
-            
+            data_df = {'First Name': [0], 'Last Name': [0], 'Eye': [0]}
+            virtual_df = pd.DataFrame(data = data_df)
+            info = csv_object.pacient_info
+            virtual_df['First Name'] = info[0]
+            virtual_df['Last Name'] = info[1]
+            virtual_df['Eye'] = info[2]
+            pacient_info = pacient_info.append(virtual_df)
         pop_up_continue = messagebox.askquestion("Salir", "¿Desea continuar introduciendo datos?", icon='warning')
         if pop_up_continue == 'yes':
             continuar = 1
@@ -125,4 +132,12 @@ if __name__ == "__main__":
     csv_file['K Max'] = csv_file['K Max'].map(lambda x: round(x, 2))
     csv_file['Position of Most Curve Point Relative to Center'] = csv_file['Position of Most Curve Point Relative to Center'].map(lambda x: round(x, 2))
     
-    csv_file.to_csv("../preprocessed_data/csv_eye.csv", sep = ";", index = False)
+    #csv_file.to_csv("../preprocessed_data/csv_eye.csv", sep = ";", index = False)
+    
+    #comprobamos los datos que hemos obtenido de los pacientes
+
+    csv_historical = pd.read_csv('../data/patient_data.csv', sep = ';')
+    csv_export = csv_historical.append(pacient_info)
+    csv_export = csv_export.drop_duplicates(['First Name', 'Last Name', 'Eye'], keep = 'first')
+    csv_export.to_csv('../data/patient_data.csv', sep = ';')
+    
