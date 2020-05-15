@@ -1,4 +1,4 @@
-# Trabajo Fin de Máster
+# Estudio del Queratocono
 
 ## Sistema de clasificación de pacientes con queratocono como apoyo a la toma de decisiones de un especialista.
 
